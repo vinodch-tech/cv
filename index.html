@@ -955,7 +955,9 @@
                     let chatHistory = [];
                     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                     const payload = { contents: chatHistory };
-                    const apiKey = ""; // Canvas runtime is expected to provide this
+                    // For Canvas environment, API key is automatically provided.
+                    // For external hosting (e.g., GitHub Pages), replace this with your actual Gemini API Key.
+                    const apiKey = "";
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                     console.log('Attempting Gemini API call with prompt:', prompt); // Log the prompt being sent
@@ -970,7 +972,7 @@
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({ message: 'No JSON response for HTTP error' }));
                         const errorMessage = `HTTP Error: ${response.status} ${response.statusText}. Details: ${errorData.error ? errorData.error.message : errorData.message}`;
-                        displayLlmOutput(title, `<p class="text-red-400">API CALL FAILED: ${errorMessage}</p>`);
+                        displayLlmOutput(title, `<p class="text-red-400">API CALL FAILED: ${errorMessage}</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>`);
                         console.error('Gemini API HTTP Error:', response.status, response.statusText, errorData);
                         return; // Exit function
                     }
@@ -985,17 +987,17 @@
                         displayLlmOutput(title, `<p class="whitespace-pre-wrap">${text}</p>`);
                     } else if (result.error) {
                         // Handle API errors specifically structured in the 'error' field
-                        displayLlmOutput(title, `<p class="text-red-400">API ERROR: ${result.error.message || 'Unknown API error'}</p>`);
+                        displayLlmOutput(title, `<p class="text-red-400">API ERROR: ${result.error.message || 'Unknown API error'}</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>`);
                         console.error('Gemini API Error Response:', result.error);
                     }
                     else {
                         // Fallback for unexpected but non-error-object responses
-                        displayLlmOutput(title, '<p class="text-red-400">ERROR: Unexpected response structure from Gemini API. Please try again. Check console for details.</p>');
+                        displayLlmOutput(title, '<p class="text-red-400">ERROR: Unexpected response structure from Gemini API. Please try again. Check console for details.</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>');
                         console.error('Gemini API returned an unexpected structure:', result);
                     }
                 } catch (error) {
                     // Handle network errors or other exceptions during the fetch process
-                    displayLlmOutput(title, `<p class="text-red-400">NETWORK ERROR: ${error.message}. Failed to connect to Gemini API. Check your internet connection.</p>`);
+                    displayLlmOutput(title, `<p class="text-red-400">NETWORK ERROR: ${error.message}. Failed to connect to Gemini API. Check your internet connection.</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>`);
                     console.error('Error calling Gemini API:', error);
                 }
             }
