@@ -20,7 +20,6 @@
         - Dynamic VLSI Background (Aesthetic/Thematic): An intricate, higher-density canvas animation of connecting nodes, subtly glowing to enhance the sci-fi/circuit board aesthetic. This provides continuous, subtle motion without distracting.
         - Dark Theme Switch (Interaction/UX): A visually distinct toggle with clear state changes, acting as a primary interface element for theme control.
         - Global Transitions: Smooth CSS transitions for color changes and subtle transform animations on interactive elements, complemented by a quick, global "halo" flash animation during theme toggles to achieve the requested dramatic effect. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -32,7 +31,7 @@
         /* Base & Light Theme Defaults (Cool & Crisp) */
         body {
             background-color: #ECF0F1; /* Very light cool gray */
-            color: #2C3E50; /* Dark desaturated blue/gray */
+            color: #2C3E50; /* Dark desaturated blue/gray as general text color */
         }
         .nav-link {
             transition: color 0.3s ease, transform 0.2s ease;
@@ -66,6 +65,12 @@
             border-color: #FF5722; /* Accent border on hover */
         }
 
+        /* Specific text colors for light theme to ensure contrast */
+        .text-gray-900, .text-gray-800 { color: #2C3E50; } /* Main headings, bold text */
+        .text-gray-700 { color: #3A4753; } /* Slightly lighter, still dark for readability */
+        .text-gray-600 { color: #5D6D7E; } /* General body text, mid-gray */
+        .text-gray-500 { color: #7B8D9F; } /* Subheadings, less prominent text */
+        
         /* Specific element overrides for light theme */
         .flow-step {
             border-color: #B0BEC5; /* Cooler border */
@@ -77,9 +82,12 @@
             box-shadow: 0 0 15px rgba(255, 87, 34, 0.5), 0 0 5px rgba(255, 87, 34, 0.7); /* Glowing shadow */
             transform: translateY(-2px);
         }
+        .responsibility-item { /* Ensuring visibility of all responsibility items */
+            color: #2C3E50; /* Explicitly dark text for all responsibility items in light mode */
+        }
         .responsibility-item.highlight {
             background-color: #FFF3E0; /* Very light orange background */
-            font-weight: 500;
+            font-weight: 600; /* Make highlighted text a bit bolder */
         }
         .skill-badge {
             background-color: #E0E0E0; /* Light gray base for badges */
@@ -100,6 +108,16 @@
         .skill-badge.core-knowledge:hover { background-color: #9C27B0; } /* Purple glow */
         .skill-badge.languages:hover { background-color: #FFC107; } /* Yellow glow */
 
+        /* Override general background/card colors for specific cases to ensure consistency */
+        .skill-group-card, .stat-card, .bg-white {
+            background-color: #FFFFFF; /* Explicitly white for cards in light theme */
+        }
+        .bg-gray-50 { /* Used in experience section, education cards, ensure contrast */
+            background-color: #F7F9FA; /* Slightly off-white for distinction */
+            color: #2C3E50; /* Dark text for contrast */
+        }
+
+
         /* Dark Theme Overrides (Deep & Luminous) */
         html.dark body {
             background-color: #0A0A0A; /* Near black */
@@ -117,6 +135,13 @@
         html.dark .nav-link.active {
             color: #FFD700;
         }
+
+        /* Specific text colors for dark theme */
+        html.dark .text-gray-900, html.dark .text-gray-800 { color: #E0E6EB; }
+        html.dark .text-gray-700 { color: #B0BEC5; }
+        html.dark .text-gray-600 { color: #8C99A8; }
+        html.dark .text-gray-500 { color: #606E7D; }
+        html.dark .text-orange-600 { color: #FFD700; } /* Consistent golden accent */
 
         html.dark .stat-card, html.dark .skill-group-card, html.dark .flow-step, #responsibilities-list, html.dark .bg-white {
             background-color: #1A1A1A; /* Dark card backgrounds */
@@ -140,6 +165,9 @@
             background-color: #252005; /* Darker glowing background */
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.5), 0 0 5px rgba(255, 215, 0, 0.7);
         }
+        html.dark .responsibility-item {
+            color: #E0E6EB; /* Explicitly light text for all responsibility items in dark mode */
+        }
         html.dark .responsibility-item.highlight {
             background-color: #202020;
         }
@@ -159,17 +187,17 @@
         html.dark .skill-badge.core-knowledge:hover { background-color: #BA68C8; color: #1A1A1A; } /* Lighter purple */
         html.dark .skill-badge.languages:hover { background-color: #FFEB3B; color: #1A1A1A; } /* Lighter yellow */
 
-        /* Generic Dark Mode text/bg adjustments */
-        html.dark .text-gray-900, html.dark .text-gray-800 { color: #E0E6EB; }
-        html.dark .text-gray-700 { color: #B0BEC5; }
-        html.dark .text-gray-600 { color: #8C99A8; }
-        html.dark .text-gray-500 { color: #606E7D; }
-        html.dark .text-orange-600 { color: #FFD700; } /* Consistent golden accent */
+        /* Override general background/card colors for specific cases to ensure consistency */
         html.dark .bg-white\/70 { background-color: rgba(26, 26, 26, 0.7); }
         html.dark .bg-gray-800 { background-color: #050505; } /* Footer darkest */
         html.dark .bg-gray-900 { background-color: #000000; } /* Darkest button hover */
         html.dark .border-orange-200 { border-color: #FFD700; }
         html.dark .bg-orange-500 { background-color: #FFD700; }
+        html.dark .bg-gray-50 {
+            background-color: #1A1A1A; /* Match card backgrounds in dark theme */
+            color: #E0E6EB;
+        }
+
 
         /* Background Canvas */
         #background-canvas {
@@ -480,7 +508,7 @@
 
                 <div class="mt-12 bg-white p-6 rounded-lg border">
                     <h3 class="text-xl font-semibold text-gray-800 tracking-wide">ROLES & RESPONSIBILITIES</h3>
-                     <ul id="responsibilities-list" class="mt-4 space-y-3 text-gray-600">
+                     <ul id="responsibilities-list" class="mt-4 space-y-3">
                         <li class="responsibility-item highlight p-3 rounded-md">Performed block-level synthesis using Genus, optimizing for area, power, and timing to improve overall efficiency.</li>
                         <li class="responsibility-item highlight p-3 rounded-md">Defined and refined synthesis constraints to enhance timing performance and meet design specifications.</li>
                         <li class="responsibility-item p-3 rounded-md">Executed placement, CTS, and routing to achieve optimal PnR results with minimal congestion and DRC violations.</li>
@@ -650,6 +678,7 @@
 
                 responsibilitiesData[step].forEach(text => {
                     const listItem = document.createElement('li');
+                    // Ensuring highlight class is applied with transition and proper padding/rounding
                     listItem.classList.add('responsibility-item', 'highlight', 'p-3', 'rounded-md', 'transition-all', 'duration-300', 'ease-in-out');
                     listItem.textContent = text;
                     listContainer.appendChild(listItem);
@@ -779,15 +808,15 @@
                 chart.update();
             }
 
-            // --- Dynamic Background Canvas Logic ---
+            // --- Dynamic Background Canvas Logic (Atom-like movement) ---
             const bgCanvas = document.getElementById('background-canvas');
             const bgCtx = bgCanvas.getContext('2d');
 
             let nodes = [];
-            const numNodes = 60;
-            const nodeRadius = 0.7;
-            const maxDistance = 150;
-            const nodeSpeed = 0.3;
+            const numNodes = 60; // Higher density for more intricate "circuit" feel
+            const nodeRadius = 0.7; // Small nodes
+            const maxDistance = 150; // Max distance for lines between nodes
+            const nodeSpeed = 0.3; // Slower, smoother movement
 
             function resizeCanvas() {
                 bgCanvas.width = window.innerWidth;
@@ -801,22 +830,25 @@
                     nodes.push({
                         x: Math.random() * bgCanvas.width,
                         y: Math.random() * bgCanvas.height,
-                        dx: (Math.random() - 0.5) * 2 * nodeSpeed,
+                        dx: (Math.random() - 0.5) * 2 * nodeSpeed, // Random direction and speed
                         dy: (Math.random() - 0.5) * 2 * nodeSpeed,
                     });
                 }
             }
 
             function draw() {
-                bgCtx.clearRect(0, 0, bgCanvas.width, bgCtx.height);
+                bgCtx.clearRect(0, 0, bgCanvas.width, bgCtx.height); // Clear canvas for redraw
                 const isDarkMode = htmlElement.classList.contains('dark');
-                const nodeColor = isDarkMode ? '#FFD700' : '#FF5722';
-                const lineColor = isDarkMode ? 'rgba(50, 50, 50, 0.6)' : 'rgba(210, 210, 210, 0.7)';
+                // Node and line colors adjusted for strong contrast in both themes
+                const nodeColor = isDarkMode ? '#FFD700' : '#FF5722'; // Gold for dark, electric orange for light
+                const lineColor = isDarkMode ? 'rgba(50, 50, 50, 0.6)' : 'rgba(210, 210, 210, 0.7)'; // Dark gray for dark, lighter gray for light
 
                 nodes.forEach(node => {
+                    // Update position
                     node.x += node.dx;
                     node.y += node.dy;
 
+                    // Bounce off walls
                     if (node.x + nodeRadius > bgCanvas.width || node.x - nodeRadius < 0) {
                         node.dx *= -1;
                     }
@@ -824,11 +856,13 @@
                         node.dy *= -1;
                     }
 
+                    // Draw node
                     bgCtx.beginPath();
                     bgCtx.arc(node.x, node.y, nodeRadius, 0, Math.PI * 2);
                     bgCtx.fillStyle = nodeColor;
                     bgCtx.fill();
 
+                    // Draw lines to other nodes within maxDistance
                     nodes.forEach(otherNode => {
                         const distance = Math.sqrt(Math.pow(node.x - otherNode.x, 2) + Math.pow(node.y - otherNode.y, 2));
                         if (distance < maxDistance) {
@@ -836,18 +870,18 @@
                             bgCtx.moveTo(node.x, node.y);
                             bgCtx.lineTo(otherNode.x, otherNode.y);
                             bgCtx.strokeStyle = lineColor;
-                            bgCtx.lineWidth = 0.3;
+                            bgCtx.lineWidth = 0.3; /* Even finer lines */
                             bgCtx.stroke();
                         }
                     });
                 });
 
-                requestAnimationFrame(draw);
+                requestAnimationFrame(draw); // Loop the animation
             }
 
             window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-            draw();
+            resizeCanvas(); // Initial setup
+            draw(); // Start animation loop
         });
     </script>
 </body>
