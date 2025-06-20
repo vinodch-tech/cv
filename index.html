@@ -12,9 +12,9 @@
     <!-- Chosen Palette: High-Contrast Cyberpunk (Light Theme: Cool Whites/Grays with Electric Orange; Dark Theme: Deep Blacks/Grays with Luminous Orange/Gold) -->
     <!-- Application Structure Plan: A single-page, scrolling portfolio with a fixed top navigation for quick access to key sections. The structure is designed to guide a recruiter from a high-level summary to detailed proof points. It starts with a Hero section for immediate impact, followed by a Skills Dashboard for a quick assessment of capabilities. The core is the interactive Project Spotlight, which visually breaks down a complex technical project. This is followed by a clean timeline for Experience & Education, culminating in a clear call-to-action in the footer. This top-down, progressively detailed structure is more intuitive for a hiring manager than the original resume's layout, allowing them to either get a quick overview or dive deep into the candidate's most significant accomplishments. -->
     <!-- Visualization & Content Choices:
-        - Hero Section (Inform): Bold typography and high contrast for immediate impact, set against the dynamic background. Includes a new LLM-powered objective refinement feature.
-        - Skills Dashboard (Organize/Inform): Grouped lists with vibrant, glowing badges that animate on hover, enhancing the "tech" feel. Includes a new LLM-powered skill summary feature.
-        - Project Spotlight - Flow (Organize/Relationships): An interactive flowchart with sharp lines and glowing active states, providing a clear and engaging breakdown of the RTL to GDSII process. Responsibilities dynamically update. Includes a new LLM-powered interview question generation feature.
+        - Hero Section (Inform): Bold typography and high contrast for immediate impact, set against the dynamic background.
+        - Skills Dashboard (Organize/Inform): Grouped lists with vibrant, glowing badges that animate on hover, enhancing the "tech" feel.
+        - Project Spotlight - Flow (Organize/Relationships): An interactive flowchart with sharp lines and glowing active states, providing a clear and engaging breakdown of the RTL to GDSII process. Responsibilities dynamically update.
         - Project Spotlight - Stats (Inform): Key quantitative metrics presented in high-contrast stat cards with subtle glowing borders on hover.
         - Education (Compare/Change): A horizontal bar chart with bold, contrasting colors that adapt to the theme, clearly visualizing academic performance.
         - Dynamic VLSI Background (Aesthetic/Thematic): An intricate, higher-density canvas animation of connecting nodes, subtly glowing to enhance the sci-fi/circuit board aesthetic. This provides continuous, subtle motion without distracting.
@@ -118,7 +118,7 @@
             color: #FFD700;
         }
 
-        html.dark .stat-card, html.dark .skill-group-card, html.dark .flow-step, html.dark #responsibilities-list, html.dark .bg-white {
+        html.dark .stat-card, html.dark .skill-group-card, html.dark .flow-step, #responsibilities-list, html.dark .bg-white {
             background-color: #1A1A1A; /* Dark card backgrounds */
             border-color: #333333; /* Darker border */
             color: #E0E6EB;
@@ -316,67 +316,6 @@
         .halo-overlay.active-dark {
             animation: haloFlashDark 0.6s forwards;
         }
-
-        /* Modal for LLM outputs */
-        .llm-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-        .llm-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .llm-modal-content {
-            background-color: #1A1A1A;
-            color: #E0E6EB;
-            padding: 2.5rem;
-            border-radius: 0.75rem;
-            width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            border: 1px solid #FFD700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-        }
-        .llm-modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: #FFD700;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .llm-modal-close:hover {
-            transform: scale(1.1);
-        }
-        .llm-loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #FFD700;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body class="antialiased">
@@ -429,7 +368,6 @@
                 </p>
                 <div class="mt-12 flex justify-center space-x-5">
                     <a href="#project" class="btn-primary">VIEW MY WORK</a>
-                    <button id="refine-objective-btn" class="btn-secondary">✨ REFINE OBJECTIVE ✨</button>
                     <a href="#contact" class="btn-secondary">GET IN TOUCH</a>
                 </div>
             </div>
@@ -491,9 +429,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-12 text-center">
-                    <button id="summarize-skills-btn" class="btn-primary">✨ SUMMARIZE ALL SKILLS ✨</button>
-                </div>
             </div>
         </section>
 
@@ -554,9 +489,6 @@
                         <li class="responsibility-item p-3 rounded-md">Analysed and fixed setup and hold violations during both synthesis and post-routing stages.</li>
                         <li class="responsibility-item p-3 rounded-md">Successfully achieved timing closure through detailed STA and constraint tuning.</li>
                     </ul>
-                    <div class="mt-8 text-center">
-                        <button id="generate-interview-questions-btn" class="btn-primary">✨ GENERATE INTERVIEW QUESTIONS ✨</button>
-                    </div>
                 </div>
             </div>
         </section>
@@ -638,19 +570,6 @@
         </footer>
     </main>
 
-    <!-- LLM Output Modal -->
-    <div id="llm-modal" class="llm-modal">
-        <div class="llm-modal-content">
-            <button id="llm-modal-close" class="llm-modal-close">&times;</button>
-            <h3 id="llm-modal-title" class="text-2xl font-bold mb-4 text-orange-600"></h3>
-            <div id="llm-modal-body" class="text-gray-300 leading-relaxed">
-                <div class="llm-loading-spinner"></div>
-                <p class="text-center mt-4">Generating response...</p>
-            </div>
-        </div>
-    </div>
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // --- Theme Toggle Logic ---
@@ -715,7 +634,7 @@
                     'Defined and refined synthesis constraints to enhance timing performance and meet design specifications.'
                 ],
                 '2': [
-                    'Executed placement, CTS, and routing to achieve optimal PnR results with minimal congestion and DRC violations.',
+                    'Executed Floor Planning, placement, CTS, and Routing to achieve optimal PnR results with minimal congestion and DRC violations.',
                     'Applied partial blockages and path groups to reduce congestion and improve timing.'
                 ],
                 '3': [
@@ -889,7 +808,7 @@
             }
 
             function draw() {
-                bgCtx.clearRect(0, 0, bgCanvas.width, bgCtx.height); /* Fixed: Use bgCtx.height */
+                bgCtx.clearRect(0, 0, bgCanvas.width, bgCtx.height);
                 const isDarkMode = htmlElement.classList.contains('dark');
                 const nodeColor = isDarkMode ? '#FFD700' : '#FF5722';
                 const lineColor = isDarkMode ? 'rgba(50, 50, 50, 0.6)' : 'rgba(210, 210, 210, 0.7)';
@@ -929,113 +848,6 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
             draw();
-
-            // --- LLM Modals and API Calls ---
-            const llmModal = document.getElementById('llm-modal');
-            const llmModalCloseBtn = document.getElementById('llm-modal-close');
-            const llmModalTitle = document.getElementById('llm-modal-title');
-            const llmModalBody = document.getElementById('llm-modal-body');
-
-            llmModalCloseBtn.addEventListener('click', () => {
-                llmModal.classList.remove('active');
-            });
-
-            // Generic function to display LLM output
-            function displayLlmOutput(title, content) {
-                llmModalTitle.textContent = title;
-                llmModalBody.innerHTML = content;
-                llmModal.classList.add('active');
-            }
-
-            // Generic function to make Gemini API call
-            async function callGeminiAPI(prompt, title) {
-                displayLlmOutput(title, '<div class="llm-loading-spinner"></div><p class="text-center mt-4">GENERATING RESPONSE...</p>');
-                
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                    const payload = { contents: chatHistory };
-                    // For Canvas environment, API key is automatically provided.
-                    // For external hosting (e.g., GitHub Pages), replace this with your actual Gemini API Key.
-                    const apiKey = "AIzaSyCc0vVdiLFxSfdk2sDk7VmXKIAE275JNfM";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    console.log('Attempting Gemini API call with prompt:', prompt); // Log the prompt being sent
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    // Check if the response itself indicates an HTTP error (e.g., 401, 403, 429, 500)
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({ message: 'No JSON response for HTTP error' }));
-                        const errorMessage = `HTTP Error: ${response.status} ${response.statusText}. Details: ${errorData.error ? errorData.error.message : errorData.message}`;
-                        displayLlmOutput(title, `<p class="text-red-400">API CALL FAILED: ${errorMessage}</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>`);
-                        console.error('Gemini API HTTP Error:', response.status, response.statusText, errorData);
-                        return; // Exit function
-                    }
-
-                    const result = await response.json();
-                    console.log('Gemini API raw result:', result); // Log the full result for debugging
-
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        displayLlmOutput(title, `<p class="whitespace-pre-wrap">${text}</p>`);
-                    } else if (result.error) {
-                        // Handle API errors specifically structured in the 'error' field
-                        displayLlmOutput(title, `<p class="text-red-400">API ERROR: ${result.error.message || 'Unknown API error'}</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>`);
-                        console.error('Gemini API Error Response:', result.error);
-                    }
-                    else {
-                        // Fallback for unexpected but non-error-object responses
-                        displayLlmOutput(title, '<p class="text-red-400">ERROR: Unexpected response structure from Gemini API. Please try again. Check console for details.</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>');
-                        console.error('Gemini API returned an unexpected structure:', result);
-                    }
-                } catch (error) {
-                    // Handle network errors or other exceptions during the fetch process
-                    displayLlmOutput(title, `<p class="text-red-400">NETWORK ERROR: ${error.message}. Failed to connect to Gemini API. Check your internet connection.</p><p class="text-sm mt-2">If hosting externally, ensure your API key is correctly inserted in the code.</p>`);
-                    console.error('Error calling Gemini API:', error);
-                }
-            }
-
-            // --- Feature 1: Generate Interview Questions ---
-            const generateInterviewQuestionsBtn = document.getElementById('generate-interview-questions-btn');
-            generateInterviewQuestionsBtn.addEventListener('click', () => {
-                const projectDetails = `Project Name: RPTOP, Role: RTL to GDSII, Technology: 28nm, Tools: Genus (Synthesis) & IC Compiler II (PnR), Frequency: 454 MHz, Standard cell: 70K, Macro: 6 Macros, No. of Metal Layers: 9 (M1 to M9).
-                Responsibilities include: Performed block-level synthesis using Genus, optimizing for area, power, and timing. Defined and refined synthesis constraints. Executed placement, CTS, and routing for optimal PnR results. Conducted block-level PV checks. Applied partial blockages and path groups. Analyzed and fixed setup and hold violations. Achieved timing closure through detailed STA and constraint tuning.`;
-
-                const prompt = `Generate 5 technical interview questions based on the following VLSI Physical Design project and responsibilities:\n\n${projectDetails}\n\nEnsure questions cover synthesis, PnR, PV checks, and STA aspects.`;
-                callGeminiAPI(prompt, 'GENERATED INTERVIEW QUESTIONS');
-            });
-
-            // --- Feature 2: Summarize Skills ---
-            const summarizeSkillsBtn = document.getElementById('summarize-skills-btn');
-            summarizeSkillsBtn.addEventListener('click', () => {
-                const physicalDesignSkills = Array.from(document.querySelectorAll('#physical-design-skills .skill-badge')).map(span => span.textContent).join(', ');
-                const analysisSynthesisSkills = Array.from(document.querySelectorAll('#analysis-synthesis-skills .skill-badge')).map(span => span.textContent).join(', ');
-                const edaToolsSkills = Array.from(document.querySelectorAll('#eda-tools-skills .skill-badge')).map(span => span.textContent).join(', ');
-                const coreKnowledgeSkills = Array.from(document.querySelectorAll('#core-knowledge-skills .skill-badge')).map(span => span.textContent).join(', ');
-                const languagesSkills = Array.from(document.querySelectorAll('#languages-skills .skill-badge')).map(span => span.textContent).join(', ');
-
-                const allSkills = `Physical Design: ${physicalDesignSkills}. Analysis & Synthesis: ${analysisSynthesisSkills}. EDA Tools: ${edaToolsSkills}. Core Knowledge: ${coreKnowledgeSkills}. Languages: ${languagesSkills}.`;
-
-                const prompt = `As a Physical Design Engineer, write a concise, professional summary of the following technical skills, highlighting key areas of expertise and overall proficiency:\n\n${allSkills}`;
-                callGeminiAPI(prompt, 'SKILLSET SUMMARY');
-            });
-
-            // --- Feature 3: Refine Objective ---
-            const refineObjectiveBtn = document.getElementById('refine-objective-btn');
-            refineObjectiveBtn.addEventListener('click', () => {
-                const currentObjective = document.getElementById('career-objective-text').textContent.trim();
-                const professionalSummary = `Trained as a physical design engineer Trainee at Sumedha IT Hyderabad. Proficient in Synthesis, Static Timing Analysis (STA). Expertise on ASIC design flow from Netlist to GDSII. Strong expertise in Floorplan, Power planning, Placement, Clock Tree Synthesis (CTS), Routing & Signoff. Strong foundation in Digital Electronics, CMOS Fundamentals and Basic Electronics. Basic understanding of Verilog and scripting languages TCL, TCSH. Hands on experience with EDA tools: ICC2 and Genus.`;
-
-                const prompt = `Refine the following career objective for a Physical Design Engineer, making it more impactful and concise, while leveraging the provided professional summary. Suggest 2-3 alternative versions.\n\nCurrent Objective: "${currentObjective}"\n\nProfessional Summary: "${professionalSummary}"`;
-                callGeminiAPI(prompt, 'REFINED CAREER OBJECTIVE');
-            });
         });
     </script>
 </body>
